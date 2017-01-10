@@ -1,3 +1,112 @@
+#URL PDF
+http://www.sincomerciobauru.com.br/upload/projeto/demo/laravel5essencial.pdf
+
+#Download composer
+#!/bin/sh
+
+EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig)
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');")
+
+if [ "$EXPECTED_SIGNATURE" != "$ACTUAL_SIGNATURE" ]
+then
+    >&2 echo 'ERROR: Invalid installer signature'
+    rm composer-setup.php
+    exit 1
+fi
+
+php composer-setup.php --quiet
+RESULT=$?
+rm composer-setup.php
+exit $RESULT
+
+#Criando Aplicação
+composer create-project --prefer-dist laravel/laravel novo_convertido
+
+composer create-project laravel/laravel laravel "5.1.*"
+
+#Criar home.blade.php para theme Auth - Login + boostrap + jQuery
+php artisan make:auth
+
+#Criando Usuário
+    mysql -u root -p
+
+CREATE USER 'arthur393'@'localhost' IDENTIFIED BY '123456';
+GRANT ALL PRIVILEGES ON *.* TO 'arthur393'@'localhost' WITH GRANT OPTION;
+
+#Criando Banco de Dados
+    mysql-ctl cli
+CREATE DATABASE if not exists novo_convertido_db;
+
+USE  novo_convertido_db;
+
+
+CREATE  TABLE if not exists TB_IGREJA  (
+     COD_IGREJA INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
+   , NOME       VARCHAR(45)      NOT NULL 
+   , ENDERECO   VARCHAR(60)      NOT NULL 
+   , TELEFONE   VARCHAR(13)      DEFAULT NULL 
+   , CELULAR    VARCHAR(13)      DEFAULT NULL 
+   , PRIMARY KEY (COD_IGREJA) 
+) ENGINE=INNODB;
+
+
+CREATE  TABLE if not exists TB_NV_CONVERTIDO  (
+     COD_NOVO_CONVERTIDO INTEGER UNSIGNED NOT NULL AUTO_INCREMENT
+   , COD_IGREJA          INTEGER          NOT NULL  
+   , NOME                VARCHAR(60)      NOT NULL 
+   , ACEITA_VISITA       CHAR(1)          DEFAULT NULL  
+   , ENDERECO            VARCHAR(45)      DEFAULT NULL 
+   , EMAIL               VARCHAR(60)      DEFAULT NULL 
+   , TELEFONE            VARCHAR(13)      DEFAULT NULL 
+   , CELULAR             VARCHAR(13)      DEFAULT NULL 
+   , DATA_NASC           DATE             DEFAULT NULL 
+   , DATA_CONVERSAO      DATE             NOT NULL 
+   , PRIMARY KEY (COD_NOVO_CONVERTIDO) 
+) ENGINE=INNODB ;
+
+
+#Rodando aplicação
+php -S localhost:8080 server.php
+
+#Criando Model
+php artisan make:model Igreja
+
+#Após crianção de model
+php artisan migrate:install
+php artisan migrate
+
+#Interpretador PHP laravel
+php artisan tinker
+
+#Inserir via interpretador
+use App\Igreja;
+
+$igreja = new Igreja();
+
+$igreja->nome     = "Assembleia de Deus";
+$igreja->endereco = "Rua Assembleia de Deus";
+$igreja->telefone = "123";
+$igreja->celular  = "123";
+$igreja->save();
+
+#Pesquisar todos
+Igreja::all();
+
+#Pesquisar especificos
+Igreja::find(1);
+
+#Alterando um objeto do banco
+igreja = Igreja::find(2);
+
+igreja->nome = "Nome Alterado";
+
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
 composer create-project laravel/laravel NovoConvertido "5.1.*"
 
 Configurar .env file
