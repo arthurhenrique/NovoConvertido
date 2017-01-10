@@ -14,6 +14,10 @@ class CreateIgrejasTable extends Migration
     {
         Schema::create('igrejas', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('nome', 45);
+            $table->string('endereco', 60);
+            $table->string('telefone', 13);
+            $table->string('celular', 13);
             $table->timestamps();
             
         });

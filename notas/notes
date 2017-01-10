@@ -1,4 +1,4 @@
-composer create-project laravel/laravel laravel "5.1.*"
+composer create-project laravel/laravel NovoConvertido "5.1.*"
 
 Configurar .env file
 
